@@ -16,7 +16,7 @@ class DetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     MyMoviesProvider provider = Provider.of<MyMoviesProvider>(context);
-
+    //this is a test
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
