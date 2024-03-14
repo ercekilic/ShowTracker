@@ -1,28 +1,49 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_full_learn/api/api_movies.dart';
+import 'package:flutter_full_learn/models/movies_tmdb.dart';
+import 'package:flutter_full_learn/showTrack/card_design.dart';
+import 'package:flutter_full_learn/showTrack/constants.dart';
 import 'package:flutter_full_learn/showTrack/film.dart';
 import 'package:flutter_full_learn/showTrack/mymovies_page.dart';
+import 'package:flutter_full_learn/showTrack/mymovies_provider.dart';
 import 'package:flutter_full_learn/showTrack/myplay_page.dart';
 import 'package:flutter_full_learn/showTrack/myseries_page.dart';
 import 'package:flutter_full_learn/showTrack/detail_page.dart';
+import 'package:provider/provider.dart';
 
 class SearchPage extends StatefulWidget {
    SearchPage({super.key});
-
+  
   @override
-  State<SearchPage> createState() => _SearchPageState();
+  State<SearchPage> createState() => SearchPageState();
 }
 
-class _SearchPageState extends State<SearchPage> {
+class SearchPageState extends State<SearchPage> {
+   
 
+   Future<List<MoviesTMDB>> filmDetails = ApiMovies().getDetailMovies("ARA");
+   Timer? _debounce;
+   void initState() {
+    super.initState();
+   
+   }
   List<Film> films = allFilms;
 
   void searchFilm(String query){
-    final suggestions = allFilms.where((film){
-    final filmTitle = film.title.toLowerCase();
-    final input = query.toLowerCase();
-    return filmTitle.contains(input);
-  }).toList();
-  setState(()=> films = suggestions);
+
+    if (_debounce?.isActive ?? false) _debounce?.cancel();
+    _debounce = Timer(const Duration(seconds: 2), () {
+      setState(() {
+        filmDetails = ApiMovies().getDetailMovies(query);
+        
+      });
+    });
+    
+
+    
+  
   }
 
 
@@ -45,8 +66,10 @@ class _SearchPageState extends State<SearchPage> {
           
            TextField(                          
         onTap: () {
-           
-        },
+            
+                     },
+
+                     
                     decoration: InputDecoration(
                     prefixIcon: const Icon(Icons.search,size: 30,),
                     hintText: 'Search for a Movie or Series',
@@ -58,108 +81,129 @@ class _SearchPageState extends State<SearchPage> {
         onChanged: searchFilm,
                           ),
           Expanded(
-          child: ListView.builder(
-            
-            itemCount: films.length,
-            itemBuilder: (context,index){
-              final film = films[index];
-                return GestureDetector(
-                      onTap: () {
-                      
-                      Navigator.push(
+              child: FutureBuilder(
+              future: filmDetails,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return Center(
+                    
+                    child: Text("An error occurred: ${snapshot.error},"),
+                    
+                  );
+                } else if (snapshot.hasData) {
+                  //       print(snapshot.data![0].title);
+                   //       print(snapshot.data![1].title);
+                     //       print(snapshot.data![2].title);
+                        //       print(snapshot.data![3].title);
+                       //       print(snapshot.data![4].title);
+                  return  ListView.builder(
+                    itemCount: 10,
+                    itemBuilder: (context, index){
+                      String filmTitle2 = snapshot.data![index].title;
+
+                      filmTitle2 = snapshot.data![index].title;
+                      return 
+                        
+                         Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.max,
+                                children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    
+                          Navigator.push(
                       context,
-                      MaterialPageRoute(
-                         builder: (context) => DetailPage(film: film),
-                          ),
+                        MaterialPageRoute(builder: (context) => DetailPage(movie: snapshot.data![index])),
                       );
-                      
-                       },
-                  child: Card(
-                        elevation: 20,
-                        color: Colors.orange,
-                        child :Container(
-                          
-                          width: 150,
-                          height: 150,
-                          color: Colors.white,
-                          child: Row(
-                            children: [
-                              SizedBox(
-                                width: 100,
-                                height:150,
-                                child: Image.network(
-                  film.urlImage,
-                  fit: BoxFit.cover,
-                  ),
                   
+                                    print("tiklandi");
+                                  },
+                                  
+                                  child: Card(
+                                    elevation: 20,
+                                    color: Colors.orange,
+                                    child: Container(
+                                    width: 400,
+                                    height: 150,
+                                    color: Colors.white,
+                                      child: Row(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                    SizedBox(
+                                                      width: 100,
+                                                      height: 150,
+                                                      child: Image.network(
+                                                        '${Constants.imagePath}${snapshot.data![index].posterPath}',
+                                                      fit: BoxFit.cover,
+                                                        ),
+                                                  ),
+                                          Expanded(
+                                              child: Padding(
+                                                  padding: const EdgeInsets.all(5.0),
+                                                     child: Column(
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                          children: [
+                                                                        Text(
+                                                                            "${snapshot.data![index].title} - ${snapshot.data![index].releaseDate}",
+                                                                          style: TextStyle(fontWeight: FontWeight.bold),
+                                                                          textAlign: TextAlign.start,
+                                                                              maxLines: 2,
+                                                                            overflow: TextOverflow.ellipsis,
+                                                                        ),
+                                                                        const SizedBox(height: 8),
+                                                                                  Text(
+                                                                            snapshot.data![index].overview,
+                                                                            maxLines: 3,
+                                                                            overflow: TextOverflow.ellipsis,
+                                                                            textAlign: TextAlign.start,
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
                                 ),
-                               Expanded(
-                                 child: Padding(
-                  padding: EdgeInsets.all(5.0),
-                  child: SizedBox(
-                    width: MediaQuery.of(context).size.width,
-                    height: 100,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text("${film.title} - ${film.year}"),                  
-                        const Text(" "),
-                        Text(
-                         film.aboutPart,
-                         maxLines: 2,
-                         overflow: TextOverflow.ellipsis,
-                         ),
-                      ], ),
-                  ),
-                             ),
-                               ),
-                            ]
-                            ),
-                        )
-                      ),
-                );
-            },
-            ),),
-        ],),
-    bottomNavigationBar: const BottomAppBarWith4Button(),
-    );
-  }
-}
-
-class MyCardDesign extends StatelessWidget {
-
-  const MyCardDesign({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      elevation: 20,
-      color: Colors.orange,
-      child :Container(
-        
-        width: 1500,
-        height: 150,
-        color: Colors.white,
-        child: Row(
-          children: [
-            Image.network('https://image.tmdb.org/t/p/w500/1E5baAaEse26fej7uHcjOgEE2t2.jpg'),
-            const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text("Movie name1"),
-                  Text("Movie year"),
-                  Text("data"),
-              
-                ],
-              ),
+                          ],
+                        );
+                      
+                    }
+                    
+                  );
+                } else {
+                  return Center(child: Text("No film details available."));
+                }
+              },
             ),
-          ]
           ),
-      )
+          
+        
+            
+
+          //  FutureBuilder(
+           //   future: filmDetails,
+          //    builder: (context, snapshot){
+          //      if(snapshot.hasError){
+           //       print(snapshot.error.toString());
+          //        return Center(
+            //        child:
+          //          Text(snapshot.error.toString()),
+           //       );
+           //     }else if(snapshot.hasData){
+           //       final data = snapshot.data;
+          //        return Text(data!.title);
+          //      }else{
+          //        return Text("21 3. else");
+          //      }
+          //    },)
+        ],
+        
+        ),
+    bottomNavigationBar: const BottomAppBarWith4Button(),
     );
   }
 }

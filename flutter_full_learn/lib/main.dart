@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_full_learn/101/arti_eksi_sayfasi.dart';
 
 import 'package:flutter_full_learn/101/navigation_learn.dart';
+import 'package:flutter_full_learn/showTrack/card_design.dart';
 import 'package:flutter_full_learn/showTrack/mymovies_provider.dart';
 import 'package:provider/provider.dart';
 

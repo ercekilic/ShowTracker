@@ -3,14 +3,19 @@ import 'package:flutter_full_learn/showTrack/film.dart';
 import 'package:flutter_full_learn/showTrack/mymovies_page.dart';
 import 'package:flutter_full_learn/showTrack/mymovies_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
-
-class DetailPageTwo extends StatelessWidget {
+class DetailPageTwo extends StatefulWidget {
   
   Film film ; 
   
   DetailPageTwo({Key? key, required this.film}) : super(key: key);
 
+  @override
+  State<DetailPageTwo> createState() => DetailPageTwoState();
+}
+
+class DetailPageTwoState extends State<DetailPageTwo> {
   @override
   Widget build(BuildContext context) {
     MyMoviesProvider provider = Provider.of<MyMoviesProvider>(context);
@@ -19,7 +24,7 @@ class DetailPageTwo extends StatelessWidget {
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-          film.title,
+          widget.film.title,
           maxLines:3,
         ),
       ),
@@ -28,14 +33,14 @@ class DetailPageTwo extends StatelessWidget {
           children: [
             SizedBox(height: 20,),
             Image.network(
-              film.urlImage,
+              widget.film.urlImage,
               width: MediaQuery.of(context).size.width,
               height: 320,
             ),
             SizedBox(height: 20),
-            Text("${film.title}"),
-            Text("Year: ${film.year}"),
-            Text("About: ${film.aboutPart}"),
+            Text("${widget.film.title}"),
+            Text("Year: ${widget.film.year}"),
+            Text("About: ${widget.film.aboutPart}"),
           ],
         ),
       ),
@@ -44,11 +49,20 @@ class DetailPageTwo extends StatelessWidget {
         children: [
           FloatingActionButton.extended(
             onPressed: () {
-             provider.dellFilm(film);
-              
+             provider.dellFilm(widget.film);
+              Fluttertoast.showToast(
+        msg: "Deleted from list",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.green,
+        textColor: Colors.white,
+        fontSize: 16.0
+        
+           );
             },
-            label: Text('DELETE FROM MY LIST'), 
             
+            label: Text('DELETE FROM MY LIST'), 
           ),
           
           
