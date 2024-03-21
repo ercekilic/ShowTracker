@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'search_page.dart';
+
+
 
 class MySeriesPage extends StatelessWidget {
    final String? title;
@@ -84,7 +85,6 @@ class MySeriesPage extends StatelessWidget {
 ),
 
 
-    bottomNavigationBar: const BottomAppBarWith4Button(),
       
     );
   }

@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_full_learn/models/movies_tmdb.dart';
 import 'package:flutter_full_learn/showTrack/constants.dart';
-import 'package:flutter_full_learn/showTrack/film.dart';
-import 'package:flutter_full_learn/showTrack/mymovies_page.dart';
-import 'package:flutter_full_learn/showTrack/mymovies_provider.dart';
-import 'package:provider/provider.dart';
+
+
 import 'package:fluttertoast/fluttertoast.dart';
 
 
@@ -17,11 +15,10 @@ class DetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    MyMoviesProvider provider = Provider.of<MyMoviesProvider>(context);
     
     return Scaffold(
       appBar: AppBar(
-  centerTitle: true,
+        centerTitle: true,
   title: Text(
     movie.title,
     maxLines:3,
@@ -42,8 +39,8 @@ class DetailPage extends StatelessWidget {
               width: MediaQuery.of(context).size.width,
               height: 320,
             ),
-            SizedBox(height: 20),
-            Text("${movie.title}"),
+            const SizedBox(height: 20),
+            Text(movie.title),
             Text("Year: ${movie.releaseDate}"),
             Text("About: ${movie.overview}"),
           ],

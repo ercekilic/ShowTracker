@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'search_page.dart';
 
 class MyPlayPage extends StatelessWidget {
   const MyPlayPage({super.key});
@@ -144,7 +143,7 @@ class MyPlayPage extends StatelessWidget {
         ],
       ),
         
-       bottomNavigationBar: BottomAppBarWith4Button(),
+       
     );
   }
 }

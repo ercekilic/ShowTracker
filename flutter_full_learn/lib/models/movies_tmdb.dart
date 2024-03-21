@@ -8,6 +8,7 @@ String overview;
 String posterPath;
 String releaseDate;
 int id;
+
   MoviesTMDB({
     required this.title,
     required this.originalTitle,

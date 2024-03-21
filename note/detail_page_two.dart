@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_full_learn/showTrack/film.dart';
+import '../flutter_full_learn/lib/showTrack/film.dart';
 import 'package:flutter_full_learn/showTrack/mymovies_page.dart';
 import 'package:flutter_full_learn/showTrack/mymovies_provider.dart';
 import 'package:provider/provider.dart';
@@ -7,9 +7,9 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 class DetailPageTwo extends StatefulWidget {
   
-  Film film ; 
   
-  DetailPageTwo({Key? key, required this.film}) : super(key: key);
+  
+  DetailPageTwo({Key? key, }) : super(key: key);
 
   @override
   State<DetailPageTwo> createState() => DetailPageTwoState();
