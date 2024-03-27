@@ -1,39 +1,37 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_full_learn/models/movies_tmdb.dart';
+import 'package:flutter_full_learn/models/movies_model.dart';
 import 'package:flutter_full_learn/showTrack/constants.dart';
-
+import 'package:flutter_full_learn/showTrack/movies_database_provider.dart';
 
 import 'package:fluttertoast/fluttertoast.dart';
 
-
-
 class DetailPage extends StatelessWidget {
-  
-   final MoviesTMDB movie;
-  
-  const DetailPage({Key? key, required this.movie}) : super(key: key);
+  final MoviesTMDB movie;
+  final movieDatabaseHelper = MovieDatabaseProvider();
 
+  DetailPage({Key? key, required this.movie}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-  title: Text(
-    movie.title,
-    maxLines:3,
-  ),
-  leading: IconButton(
-    icon: Icon(Icons.arrow_back),
-    onPressed: () {
-      Navigator.of(context).pop();
-    },
-  ),
-),
+        title: Text(
+          movie.title,
+          maxLines: 3,
+        ),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+      ),
       body: Center(
         child: Column(
           children: [
-            SizedBox(height: 20,),
+            const SizedBox(
+              height: 20,
+            ),
             Image.network(
               '${Constants.imagePath}${movie.posterPath}',
               width: MediaQuery.of(context).size.width,
@@ -42,7 +40,13 @@ class DetailPage extends StatelessWidget {
             const SizedBox(height: 20),
             Text(movie.title),
             Text("Year: ${movie.releaseDate}"),
-            Text("About: ${movie.overview}"),
+            SingleChildScrollView(
+              //neden çalışmıyor?
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text("About: ${movie.overview}"),
+              ),
+            ),
           ],
         ),
       ),
@@ -50,46 +54,54 @@ class DetailPage extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           FloatingActionButton.extended(
-            onPressed: () {
-              //neden çalışmıyor ?
+            heroTag: "btn1",
+            onPressed: () async {
               
-           //   provider.addFilm(film);
-              Fluttertoast.showToast(
-        msg: "Added to list",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.green,
-        textColor: Colors.white,
-        fontSize: 16.0
-        
-           );
+              MovieDatabaseProvider movieProvider = MovieDatabaseProvider();
+              await movieProvider.open();
+              bool result = await movieProvider.insert(movie.id, movie);
+              if (result) {
+                // Ekleme başarılı
+                Fluttertoast.showToast(
+                    msg: "Added to list",
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.BOTTOM,
+                    timeInSecForIosWeb: 1,
+                    backgroundColor: Colors.green,
+                    textColor: Colors.white,
+                    fontSize: 16.0);
+              } else {
+                Fluttertoast.showToast(
+                    msg: "not added to list",
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.BOTTOM,
+                    timeInSecForIosWeb: 1,
+                    backgroundColor: Colors.green,
+                    textColor: Colors.white,
+                    fontSize: 16.0);
+              }
             },
-            label: Text('Izlediklerime ekle'),
-             
-            icon: Icon(Icons.add), 
+            label: const Text('Izlediklerime ekle'),
+            icon: const Icon(Icons.add),
           ),
-          SizedBox(width: 5), 
+          const SizedBox(width: 5),
           FloatingActionButton.extended(
+            heroTag: "btn2",
             onPressed: () {
               Fluttertoast.showToast(
-        msg: "added to watch list",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.green,
-        textColor: Colors.white,
-        fontSize: 16.0
-        
-           );
+                  msg: "added to watch list",
+                  toastLength: Toast.LENGTH_SHORT,
+                  gravity: ToastGravity.BOTTOM,
+                  timeInSecForIosWeb: 1,
+                  backgroundColor: Colors.green,
+                  textColor: Colors.white,
+                  fontSize: 16.0);
             },
-            
-            label: Text('Izleneceklere ekle'), 
-            icon: Icon(Icons.add), 
+            label: const Text('Izleneceklere ekle'),
+            icon: const Icon(Icons.add),
           ),
         ],
       ),
     );
   }
 }
-

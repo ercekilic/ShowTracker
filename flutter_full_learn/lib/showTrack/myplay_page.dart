@@ -30,7 +30,7 @@ class MyPlayPage extends StatelessWidget {
                   ),
        
       ),
-          SizedBox(height: 10,),
+          const SizedBox(height: 10,),
             Container(
             color: Colors.amber,
             width: double.infinity,
@@ -38,18 +38,18 @@ class MyPlayPage extends StatelessWidget {
             child: Row(
               
               children: [
-                                  SizedBox(width: 15,),
+                                  const SizedBox(width: 15,),
 
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Image.network('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRHpiX6QwgIOQkRv1NBQZL7x9b7t6QZiMiV83v4o-TIxBeA91CB'),
                   ),
-                  SizedBox(width: 30,),
+                  const SizedBox(width: 30,),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Image.network('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRHpiX6QwgIOQkRv1NBQZL7x9b7t6QZiMiV83v4o-TIxBeA91CB'),
                   ),
-                  SizedBox(width: 30,),
+                  const SizedBox(width: 30,),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Image.network('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRHpiX6QwgIOQkRv1NBQZL7x9b7t6QZiMiV83v4o-TIxBeA91CB'),
@@ -65,18 +65,18 @@ class MyPlayPage extends StatelessWidget {
             child: Row(
               
               children: [
-                  SizedBox(width: 15,),
+                  const SizedBox(width: 15,),
 
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Image.network('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRHpiX6QwgIOQkRv1NBQZL7x9b7t6QZiMiV83v4o-TIxBeA91CB'),
                   ),
-                  SizedBox(width: 30,),
+                  const SizedBox(width: 30,),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Image.network('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRHpiX6QwgIOQkRv1NBQZL7x9b7t6QZiMiV83v4o-TIxBeA91CB'),
                   ),
-                  SizedBox(width: 30,),
+                  const SizedBox(width: 30,),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Image.network('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRHpiX6QwgIOQkRv1NBQZL7x9b7t6QZiMiV83v4o-TIxBeA91CB'),
@@ -92,18 +92,18 @@ class MyPlayPage extends StatelessWidget {
             child: Row(
               
               children: [
-                                          SizedBox(width: 15,),
+                                          const SizedBox(width: 15,),
 
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Image.network('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRHpiX6QwgIOQkRv1NBQZL7x9b7t6QZiMiV83v4o-TIxBeA91CB'),
                   ),
-                  SizedBox(width: 30,),
+                  const SizedBox(width: 30,),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Image.network('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRHpiX6QwgIOQkRv1NBQZL7x9b7t6QZiMiV83v4o-TIxBeA91CB'),
                   ),
-                  SizedBox(width: 30,),
+                  const SizedBox(width: 30,),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Image.network('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRHpiX6QwgIOQkRv1NBQZL7x9b7t6QZiMiV83v4o-TIxBeA91CB'),
@@ -119,18 +119,18 @@ class MyPlayPage extends StatelessWidget {
             child: Row(
               
               children: [
-                                          SizedBox(width: 15,),
+                                          const SizedBox(width: 15,),
 
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Image.network('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRHpiX6QwgIOQkRv1NBQZL7x9b7t6QZiMiV83v4o-TIxBeA91CB'),
                   ),
-                  SizedBox(width: 30,),
+                  const SizedBox(width: 30,),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Image.network('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRHpiX6QwgIOQkRv1NBQZL7x9b7t6QZiMiV83v4o-TIxBeA91CB'),
                   ),
-                  SizedBox(width: 30,),
+                  const SizedBox(width: 30,),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Image.network('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRHpiX6QwgIOQkRv1NBQZL7x9b7t6QZiMiV83v4o-TIxBeA91CB'),

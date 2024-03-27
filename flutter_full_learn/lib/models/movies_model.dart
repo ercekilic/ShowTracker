@@ -31,7 +31,17 @@ int id;
       id: json["id"]?? "",
       );
   }
-
+  Map<String, dynamic> toJson() {
+  return {
+    "title": title,
+    "original_title": originalTitle,
+    "backdrop_path": backDropPath,
+    "overview": overview,
+    "poster_path": posterPath,
+    "release_date": releaseDate,
+    "id": id,
+  };
+}
   
 
 }

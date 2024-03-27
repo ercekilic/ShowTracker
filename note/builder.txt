@@ -1,0 +1,51 @@
+import 'dart:async';
+import 'package:flutter/material.dart';
+import 'package:flutter_full_learn/models/movies_tmdb.dart';
+import 'package:flutter_full_learn/showTrack/detail_page.dart';
+
+import '../flutter_full_learn/lib/showTrack/card_design.dart';
+
+class MyBuilder extends StatelessWidget {
+  const MyBuilder({
+    super.key,
+    required this.films,
+  });
+
+  final Future<List<MoviesTMDB>> films;
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+      future: films,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          return Center(
+            child: Text("An error occurred: ${snapshot.error},"),
+          );
+        } else if (snapshot.hasData) {
+          return ListView.builder(
+              itemCount: 10,
+              itemBuilder: (context, index) {
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              DetailPage(movie: snapshot.data![index])),
+                    );
+
+                    print("tiklandi");
+                  },
+                  child: CardDesign(movie: snapshot.data![index]),
+                );
+              });
+        } else {
+          return const Center(child: Text("No film available."));
+        }
+      },
+    );
+  }
+}

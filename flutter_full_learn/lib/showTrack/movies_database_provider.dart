@@ -1,0 +1,91 @@
+import "package:flutter_full_learn/models/movies_model.dart";
+import "package:sqflite/sqflite.dart";
+
+class MovieDatabaseProvider {
+  final String movieDatabaseName = "movieDatabase";
+  String movieTableName = "movie";
+  late Database database;
+  String columnId = 'id';
+  String columnMovieTitle = "title";
+  String columnMovieOriginalTitle = "originalTitle";
+  String columnMovieBackDropPath = "backDropPath";
+  String columnMovieOverview = "overview";
+  String columnMoviePosterPath = "posterPath";
+  String columnMovieReleaseDate = "releaseDate";
+  String columnMovieId = 'id';
+
+  Future<void> open() async {
+    database = await openDatabase(
+      movieDatabaseName,
+      version: 1,
+      onCreate: (db, version) {
+        createTable(db);
+      },
+    );
+  }
+
+  Future<void> createTable(Database db) async {
+    print('createTable method called');
+    await db.execute('''CREATE TABLE $movieTableName ( 
+        $columnId INTEGER PRIMARY KEY,
+        $columnMovieTitle TEXT,
+        $columnMovieOriginalTitle TEXT,
+        $columnMovieBackDropPath TEXT,
+        $columnMovieOverview TEXT,
+        $columnMoviePosterPath TEXT,
+        $columnMovieReleaseDate TEXT,
+        $columnMovieId INTEGER
+         ) ''');
+  }
+
+  Future<List<MoviesTMDB>> getList() async {
+    List<Map<String, dynamic>> movieMaps = await database.query(movieTableName);
+    List<MoviesTMDB> movies = [];
+    for (Map<String, dynamic> map in movieMaps) {
+      movies.add(MoviesTMDB.fromJson(map));
+    }
+    return movies;
+  }
+
+  Future<bool> delete(int id) async {
+    try {
+      int rowCount = await database.delete(
+        movieTableName,
+        where: '$columnMovieId = ?',
+        whereArgs: [id],
+      );
+      return rowCount > 0;
+    } catch (e) {
+      return false;
+    }
+  }
+  Future<bool> update(int id,MoviesTMDB model) async {
+    try {
+      int rowCount = await database.update(
+        movieTableName,
+        model.toJson(),
+        where: '$columnMovieId = ?',
+        whereArgs: [id],
+      );
+      return rowCount > 0;
+    } catch (e) {
+      return false;
+    }
+  }
+  Future<bool> insert(int id,MoviesTMDB model) async {
+    try {
+      int rowCount = await database.insert(
+        movieTableName,
+        model.toJson(),
+      );
+      return rowCount > 0;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  Future<void> close() async{
+     await database.close();
+  }
+
+}

@@ -8,12 +8,12 @@ import 'showTrack/search_page.dart';
 
 
 void main() {
-  runApp( MyApp());
+  runApp( const MyApp());
 }
 
 class MyApp extends StatefulWidget {
 
-   MyApp({super.key});
+   const MyApp({super.key});
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -21,9 +21,9 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   int currentIndex =0 ;
-
+  
   final screens = [
-    SearchPage(),
+    const SearchPage(),
     const MyMoviesPage(),
     const MySeriesPage(),
     const MyPlayPage(),
