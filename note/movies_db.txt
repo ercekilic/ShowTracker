@@ -1,0 +1,58 @@
+
+import 'package:flutter_full_learn/models/movies_model.dart';
+import 'package:flutter_full_learn/showTrack/database/database_services.txt';
+import 'package:sqflite/sqflite.dart';
+
+class MoviesDB{
+  final String movieDatabaseName = "movieDatabase";
+  String movieTableName = "movie";
+  late Database database;
+  String columnMovieTitle = "title";
+  String columnMovieOriginalTitle = "originalTitle";
+  String columnMovieBackDropPath = "backDropPath";
+  String columnMovieOverview = "overview";
+  String columnMoviePosterPath = "posterPath";
+  String columnMovieReleaseDate = "releaseDate";
+  String columnMovieId = 'id';
+
+  Future<void> createTable(Database database) async {
+    await database.execute('''CREATE TABLE $movieTableName ( 
+        $columnMovieTitle TEXT,
+        $columnMovieBackDropPath TEXT,
+        $columnMovieOverview TEXT,
+        $columnMoviePosterPath TEXT,
+        $columnMovieReleaseDate TEXT,
+        $columnMovieId INTEGER
+         ) ''');
+  }
+
+  Future<int> create({required MoviesTMDB movie}) async {
+  final database = await DatabaseServices().database;
+  return await database.rawInsert(
+    '''INSERT INTO $movieTableName (title, +, overview, poster_path, release_date, id) 
+      VALUES ($columnMovieTitle, $columnMovieBackDropPath, $columnMovieOverview, $columnMoviePosterPath, $columnMovieReleaseDate, $columnMovieId)
+''',
+    [movie.title, movie.originalTitle, movie.backDropPath, movie.overview, movie.posterPath, movie.releaseDate, movie.id],
+  );
+}
+
+Future<List<MoviesTMDB>> fetchAllMovies() async {
+  final database = await DatabaseServices().database;
+  List<Map<String, dynamic>> results = await database.query(movieTableName);
+  return results.map((json) => MoviesTMDB.fromJson(json)).toList();
+}
+
+Future<List<MoviesTMDB>> fetchByID(int id) async {
+  final database = await DatabaseServices().database;
+  List<Map<String, dynamic>> results = await database.rawQuery('''SELECT * from $movieTableName WHERE $columnMovieId = ? ''',[id]
+  );
+  return results.map((json) => MoviesTMDB.fromJson(json)).toList();
+}
+
+Future<void> delete (int id) async{
+  final database = await DatabaseServices().database;
+  await database.rawDelete('''DELETE FROM $movieTableName WHERE $columnMovieId = ?''',[id]);
+}
+
+
+}

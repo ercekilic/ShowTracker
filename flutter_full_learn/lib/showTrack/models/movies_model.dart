@@ -1,5 +1,3 @@
-
-
 class MoviesTMDB {
 String title;
 String originalTitle;

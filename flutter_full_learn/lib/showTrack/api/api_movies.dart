@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 
-import 'package:flutter_full_learn/models/movies_model.dart';
+import 'package:flutter_full_learn/showTrack/models/movies_model.dart';
 import 'package:flutter_full_learn/showTrack/constants.dart';
 
 class ApiMovies {

@@ -1,22 +1,37 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_full_learn/models/movies_model.dart';
+import 'package:flutter_full_learn/showTrack/models/movies_model.dart';
 import 'package:flutter_full_learn/showTrack/constants.dart';
-import 'package:flutter_full_learn/showTrack/movies_database_provider.dart';
-
 import 'package:fluttertoast/fluttertoast.dart';
+import 'database/movies_db_helper.dart';
 
-class DetailPage extends StatelessWidget {
+class DetailPage extends StatefulWidget {
+  
   final MoviesTMDB movie;
-  final movieDatabaseHelper = MovieDatabaseProvider();
 
-  DetailPage({Key? key, required this.movie}) : super(key: key);
+  const DetailPage({Key? key, required this.movie}) : super(key: key);
+
+  @override
+  State<DetailPage> createState() => _DetailPageState();
+}
+
+class _DetailPageState extends State<DetailPage> {
+
+  Future<List<MoviesTMDB>>? futureMovies;
+
+   @override
+  void initState(){
+    super.initState();
+  }
+
+  
+ 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-          movie.title,
+          widget.movie.title,
           maxLines: 3,
         ),
         leading: IconButton(
@@ -29,22 +44,38 @@ class DetailPage extends StatelessWidget {
       body: Center(
         child: Column(
           children: [
-            const SizedBox(
-              height: 20,
+            Flex(
+              direction: Axis.vertical,
+              children: [
+                const SizedBox(
+                  height: 20,
+                ),
+                Image.network(
+                  '${Constants.imagePath}${widget.movie.posterPath}',
+                  width: MediaQuery.of(context).size.width,
+                  height: 320,
+                ),
+                const SizedBox(height: 20),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(widget.movie.title
+                      //aligmentını centerla
+                      ),
+                ),
+                Padding(
+                  //neden ? bottomdan padding almıyor
+                  padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
+                  child: Text("Year: ${widget.movie.releaseDate}"),
+                ),
+              ],
             ),
-            Image.network(
-              '${Constants.imagePath}${movie.posterPath}',
-              width: MediaQuery.of(context).size.width,
-              height: 320,
-            ),
-            const SizedBox(height: 20),
-            Text(movie.title),
-            Text("Year: ${movie.releaseDate}"),
-            SingleChildScrollView(
-              //neden çalışmıyor?
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text("About: ${movie.overview}"),
+            Expanded(
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                      "About: ${widget.movie.overview},${widget.movie.overview},${widget.movie.overview}"),
+                ),
               ),
             ),
           ],
@@ -56,12 +87,11 @@ class DetailPage extends StatelessWidget {
           FloatingActionButton.extended(
             heroTag: "btn1",
             onPressed: () async {
-              
-              MovieDatabaseProvider movieProvider = MovieDatabaseProvider();
-              await movieProvider.open();
-              bool result = await movieProvider.insert(movie.id, movie);
-              if (result) {
-                // Ekleme başarılı
+
+              MoviesDBHelper dbHelper = MoviesDBHelper();
+              int result = await dbHelper.insertMovie(widget.movie);
+              print(result);
+              if (result > 0) {
                 Fluttertoast.showToast(
                     msg: "Added to list",
                     toastLength: Toast.LENGTH_SHORT,
@@ -76,7 +106,7 @@ class DetailPage extends StatelessWidget {
                     toastLength: Toast.LENGTH_SHORT,
                     gravity: ToastGravity.BOTTOM,
                     timeInSecForIosWeb: 1,
-                    backgroundColor: Colors.green,
+                    backgroundColor: Colors.red,
                     textColor: Colors.white,
                     fontSize: 16.0);
               }
@@ -105,3 +135,4 @@ class DetailPage extends StatelessWidget {
     );
   }
 }
+

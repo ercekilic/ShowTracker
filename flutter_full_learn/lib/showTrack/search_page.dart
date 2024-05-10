@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter_full_learn/api/api_movies.dart';
-import 'package:flutter_full_learn/models/movies_model.dart';
+import 'package:flutter_full_learn/showTrack/api/api_movies.dart';
+import 'package:flutter_full_learn/showTrack/models/movies_model.dart';
 import 'package:flutter_full_learn/showTrack/detail_page.dart';
 import 'card_design.dart';
 

@@ -15,17 +15,22 @@ class MovieDatabaseProvider {
   String columnMovieId = 'id';
 
   Future<void> open() async {
+    //boola döndür...
     database = await openDatabase(
       movieDatabaseName,
       version: 1,
-      onCreate: (db, version) {
+      onCreate: (db, version) async{
         createTable(db);
       },
     );
+      print("oluşruldu");
+
   }
+  
 
   Future<void> createTable(Database db) async {
     print('createTable method called');
+    //kontrolunu sağlamak lazım
     await db.execute('''CREATE TABLE $movieTableName ( 
         $columnId INTEGER PRIMARY KEY,
         $columnMovieTitle TEXT,
@@ -80,6 +85,7 @@ class MovieDatabaseProvider {
       );
       return rowCount > 0;
     } catch (e) {
+      print(e.toString());
       return false;
     }
   }

@@ -24,15 +24,13 @@ class _MyAppState extends State<MyApp> {
   
   final screens = [
     const SearchPage(),
-    const MyMoviesPage(),
+    const MovieListScreen(),
     const MySeriesPage(),
     const MyPlayPage(),
   ];
 
   @override
   Widget build(BuildContext context) {
-    
-    
     return MaterialApp(
        debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
