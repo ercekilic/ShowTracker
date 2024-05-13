@@ -75,7 +75,7 @@ class MovieListScreenState extends State<MovieListScreen> {
                             futureMovies = dbHelper.getMovies();
                           });
                         },
-                        child: Icon(Icons.delete),
+                        child: const Icon(Icons.delete),
                       ),
                     ),
                   ],

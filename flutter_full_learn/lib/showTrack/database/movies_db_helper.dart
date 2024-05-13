@@ -6,7 +6,7 @@ import 'package:flutter_full_learn/showTrack/models/movies_model.dart';
 
 class MoviesDBHelper {
   static final MoviesDBHelper _instance = MoviesDBHelper._internal();
-
+  
   factory MoviesDBHelper() => _instance;
 
   static Database? _database;
@@ -36,21 +36,29 @@ class MoviesDBHelper {
         backdrop_path TEXT,
         overview TEXT,
         poster_path TEXT,
-        release_date TEXT
+        release_date TEXT,
         id INTEGER,
+        media_type TEXT
       )
     ''');
   }
-
   Future<int> insertMovie(MoviesTMDB movie) async {
     final db = await database;
-    print("eklendi");
-    return await db!.insert('Movies', movie.toJson());
+  var existingMovies = await db!.query('Movies', where: 'id = ?', whereArgs: [movie.id]);
+  if (existingMovies.isNotEmpty) {
+    return -1; 
+  }
+  return await db.insert('Movies', movie.toJson());
   }
 
   Future<List<MoviesTMDB>> getMovies() async {
     final db = await database;
-    var res = await db!.query('Movies');
+    var res = await db!.query('Movies', where: 'media_type = ?', whereArgs: ["movie"]);
+    return res.isNotEmpty ? res.map((c) => MoviesTMDB.fromJson(c)).toList() : [];
+  }
+  Future<List<MoviesTMDB>> getShows() async {
+    final db = await database;
+    var res = await db!.query('Movies', where: 'media_type = ?', whereArgs: ["tv"]);
     return res.isNotEmpty ? res.map((c) => MoviesTMDB.fromJson(c)).toList() : [];
   }
 
@@ -58,4 +66,11 @@ class MoviesDBHelper {
     final db = await database;
     return await db!.delete('Movies', where: 'id = ?', whereArgs: [id]);
   }
+
+  Future<dynamic> alterTable(String tableName, String columneName) async {
+  var db = await database;
+  var count = await db?.execute("ALTER TABLE $tableName ADD "
+      "COLUMN $columneName TEXT;");
+  return count;
+}
 }

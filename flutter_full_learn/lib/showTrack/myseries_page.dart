@@ -1,77 +1,95 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_full_learn/showTrack/card_design.dart';
+import 'package:flutter_full_learn/showTrack/database/movies_db_helper.dart';
+import 'package:flutter_full_learn/showTrack/detail_page.dart';
+import 'package:flutter_full_learn/showTrack/models/movies_model.dart';
 
-class MySeriesPage extends StatelessWidget {
-  final String? title;
-  final int? year;
-  final String? urlImage;
+class MySeriesPage extends StatefulWidget {
+  const MySeriesPage({super.key});
+  @override
+  State<MySeriesPage> createState() => _MySeriesPageState();
+}
 
-  const MySeriesPage({Key? key, this.title, this.year, this.urlImage})
-      : super(key: key);
+class _MySeriesPageState extends State<MySeriesPage> {
+  
+  late Future<List<MoviesTMDB>> futureMovies;
+  MoviesDBHelper dbHelper = MoviesDBHelper();
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    getShowsFromDB();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: const Text("My watched series list"),
-        centerTitle: true,
-      ),
-      body: Column(
-        children: [
-          Card(
-            elevation: 20,
-            color: Colors.green,
-            child: Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(3.0),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    flex: 1,
-                    child: Image.network(
-                      urlImage ??
-                          'https://image.tmdb.org/t/p/w500/1E5baAaEse26fej7uHcjOgEE2t2.jpg',
-                      width: double.infinity,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  const SizedBox(width: 8.0),
-                  Expanded(
-                    flex: 3,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          title ?? "Series name",
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        const SizedBox(height: 8.0),
-                        Text(year != null ? "Year: $year" : "Season year"),
-                        const SizedBox(height: 8.0),
-                        const Text("season 1")
-                      ],
-                    ),
-                  ),
-                  const SizedBox(width: 8.0),
-                  Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(top: 56),
-                        child: ElevatedButton(
-                          onPressed: () {},
-                          child: const Text('delete'),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
+        title: const Text('My TV shows List'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.refresh),
+            tooltip: 'Reload',
+            onPressed: () {
+              setState(() {
+                futureMovies = dbHelper.getShows();
+              });
+            },
           ),
         ],
       ),
+      body: FutureBuilder<List<MoviesTMDB>>(
+        future: futureMovies,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return const Center(child: Text('No movies found'));
+          } else {
+            return ListView.builder(
+              itemCount: snapshot.data!.length,
+              itemBuilder: (context, index) {
+                return Stack(
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                DetailPage(movie: snapshot.data![index]),
+                          ),
+                        );
+                      },
+                      child: CardDesign(movie: snapshot.data![index]),
+                    ),
+                    Positioned(
+                      top: 8,
+                      right: 8,
+                      child: GestureDetector(
+                        onTap: () {
+                          dbHelper.deleteMovie(snapshot.data![index].id);
+                          setState(() {
+                            futureMovies = dbHelper.getShows();
+                          });
+                        },
+                        child: const Icon(Icons.delete),
+                      ),
+                    ),
+                  ],
+                );
+              },
+            );
+          }
+        },
+      ),
     );
+  }
+
+  Future<void> getShowsFromDB() async {
+    setState(() {
+      futureMovies = dbHelper.getShows();
+    });
   }
 }

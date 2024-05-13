@@ -5,7 +5,8 @@ import 'package:flutter_full_learn/showTrack/constants.dart';
 class CardDesign extends StatelessWidget {
   final MoviesTMDB movie;
   const CardDesign({
-    super.key, required this.movie,
+    super.key,
+    required this.movie,
   });
 
   @override
@@ -39,16 +40,14 @@ class CardDesign extends StatelessWidget {
                   children: [
                     Text(
                       "${movie.title} ",
-                      style: const TextStyle(
-                          fontWeight: FontWeight.bold),
+                      style: const TextStyle(fontWeight: FontWeight.bold),
                       textAlign: TextAlign.start,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
                     Text(
                       movie.releaseDate,
-                      style: const TextStyle(
-                          fontWeight: FontWeight.bold),
+                      style: const TextStyle(fontWeight: FontWeight.bold),
                       textAlign: TextAlign.start,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
@@ -57,6 +56,12 @@ class CardDesign extends StatelessWidget {
                     Text(
                       movie.overview,
                       maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.start,
+                    ),
+                    Text(
+                      "Media Type: ${movie.mediaType}",
+                      maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       textAlign: TextAlign.start,
                     ),

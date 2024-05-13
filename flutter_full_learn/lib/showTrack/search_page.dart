@@ -21,7 +21,7 @@ class SearchPageState extends State<SearchPage> {
   void initState() {
     super.initState();
   }
-  
+
   void searchMovie(String query) async {
     if (_debounce?.isActive ?? false) _debounce?.cancel();
     _debounce = Timer(const Duration(seconds: 1), () async {
@@ -68,22 +68,24 @@ class SearchPageState extends State<SearchPage> {
                   );
                 } else if (snapshot.hasData) {
                   return ListView.builder(
-                    itemCount: snapshot.data!.length,
-                    itemBuilder: (context, index) {
-                      return GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  DetailPage(movie: snapshot.data![index]),
-                            ),
+                      itemCount: snapshot.data!.length,
+                      itemBuilder: (context, index) {
+                        if (snapshot.data![index].mediaType != "person") {
+                          return GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      DetailPage(movie: snapshot.data![index]),
+                                ),
+                              );
+                            },
+                            child: CardDesign(movie: snapshot.data![index]),
                           );
-                        },
-                        child: CardDesign(movie: snapshot.data![index]),
-                      );
-                    },
-                  );
+                        }
+                        return null;
+                      });
                 } else {
                   return const Center(child: Text("No film available."));
                 }
