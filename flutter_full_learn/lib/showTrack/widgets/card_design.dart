@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_full_learn/showTrack/models/movies_model.dart';
-import 'package:flutter_full_learn/showTrack/constants.dart';
+import 'package:flutter_full_learn/showTrack/constants/constants.dart';
 
 class CardDesign extends StatelessWidget {
   final MoviesTMDB movie;

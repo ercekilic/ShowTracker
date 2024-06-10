@@ -1,16 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_full_learn/showTrack/mymovies_page.dart';
-import 'package:flutter_full_learn/showTrack/myplay_page.dart';
-import 'package:flutter_full_learn/showTrack/myseries_page.dart';
+import 'package:flutter_full_learn/showTrack/pages/mymovies_page.dart';
+import 'package:flutter_full_learn/showTrack/pages/myplay_page.dart';
+import 'package:flutter_full_learn/showTrack/pages/myseries_page.dart';
+import 'package:flutter_full_learn/showTrack/providers/db_provider.dart';
+import 'package:provider/provider.dart';
 
 
-import 'showTrack/search_page.dart';
+import 'showTrack/pages/search_page.dart';
+
 
 
 void main() {
-  runApp( const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => DbProvider()),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
-
 class MyApp extends StatefulWidget {
 
    const MyApp({super.key});

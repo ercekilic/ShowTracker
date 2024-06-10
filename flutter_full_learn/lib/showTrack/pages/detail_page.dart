@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_full_learn/showTrack/models/movies_model.dart';
-import 'package:flutter_full_learn/showTrack/constants.dart';
-import 'package:flutter_full_learn/showTrack/seasons_card_design.dart';
+import 'package:flutter_full_learn/showTrack/constants/constants.dart';
+import 'package:flutter_full_learn/showTrack/widgets/seasons_card_design.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'database/movies_db_helper.dart';
+import '../database/movies_db_helper.dart';
+import '../providers/db_provider.dart';
 
 class DetailPage extends StatefulWidget {
   final MoviesTMDB movie;
@@ -72,7 +73,7 @@ class _DetailPageState extends State<DetailPage> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  "About: ${widget.movie.overview} ${widget.movie.overview} ${widget.movie.overview} ${widget.movie.overview}${widget.movie.overview}${widget.movie.overview}${widget.movie.overview}${widget.movie.overview}${widget.movie.overview}${widget.movie.overview}${widget.movie.overview}${widget.movie.overview}${widget.movie.overview}${widget.movie.overview}${widget.movie.overview}${widget.movie.overview}${widget.movie.overview}${widget.movie.overview}",
+                  "About: ${widget.movie.overview}",
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -93,7 +94,19 @@ class _DetailPageState extends State<DetailPage> {
             onPressed: () async {
               MoviesDBHelper dbHelper = MoviesDBHelper();
               int result = await dbHelper.insertMovie(widget.movie);
-              if (result > 0) {
+              print(result);
+              DbProvider().increment();
+              if  (result == -1) {
+                
+                Fluttertoast.showToast(
+                    msg: "This is already in collection",
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.BOTTOM,
+                    timeInSecForIosWeb: 1,
+                    backgroundColor: Colors.amber,
+                    textColor: Colors.white,
+                    fontSize: 16.0);
+              } else if (result != 0) {
                 Fluttertoast.showToast(
                     msg: "Added to list",
                     toastLength: Toast.LENGTH_SHORT,
@@ -103,16 +116,7 @@ class _DetailPageState extends State<DetailPage> {
                     textColor: Colors.white,
                     fontSize: 16.0);
               }
-              if (result == -1) {
-                Fluttertoast.showToast(
-                    msg: "This is already in collection",
-                    toastLength: Toast.LENGTH_SHORT,
-                    gravity: ToastGravity.BOTTOM,
-                    timeInSecForIosWeb: 1,
-                    backgroundColor: Colors.amber,
-                    textColor: Colors.white,
-                    fontSize: 16.0);
-              } else {
+              else {
                 Fluttertoast.showToast(
                     msg: "not added to list",
                     toastLength: Toast.LENGTH_SHORT,
@@ -122,6 +126,7 @@ class _DetailPageState extends State<DetailPage> {
                     textColor: Colors.white,
                     fontSize: 16.0);
               }
+              
             },
             label: const Text('Izlediklerime ekle'),
             icon: const Icon(Icons.add),

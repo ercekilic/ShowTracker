@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_full_learn/showTrack/card_design.dart';
-import 'package:flutter_full_learn/showTrack/detail_page.dart';
+import 'package:flutter_full_learn/showTrack/widgets/card_design.dart';
+import 'package:flutter_full_learn/showTrack/pages/detail_page.dart';
 import 'package:flutter_full_learn/showTrack/models/movies_model.dart';
 
-import 'database/movies_db_helper.dart';
+import '../database/movies_db_helper.dart';
 
 class MovieListScreen extends StatefulWidget {
   const MovieListScreen({super.key});
@@ -18,6 +18,7 @@ class MovieListScreenState extends State<MovieListScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    getDatabaseChanges();
     getMoviesFromDB();
   }
 
@@ -91,6 +92,12 @@ class MovieListScreenState extends State<MovieListScreen> {
   Future<void> getMoviesFromDB() async {
     setState(() {
       futureMovies = dbHelper.getMovies();
+    });
+  }
+
+  Future<void> getDatabaseChanges() async{
+    setState(() {
+      dbHelper.getDatabaseChange();
     });
   }
 }
